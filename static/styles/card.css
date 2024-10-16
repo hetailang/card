@@ -1,19 +1,25 @@
-/* 容器样式 */
 .container {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px;  /* 可根据需要设置边距 */
+    padding: 20px;
+    /* 可根据需要设置边距 */
 }
 
 .preview {
-    max-width: 800px;  /* 设置最大宽度，适合屏幕较宽时 */
-    width: 100%;       /* 占据父容器的 100% 宽度 */
-    padding: 20px;     /* 内边距，用于调整内部元素的位置 */
-    background-color: white;  /* 确保背景颜色 */
-    border-radius: 24px;      /* 圆角 */
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);  /* 设置阴影效果 */
+    max-width: 800px;
+    /* 设置最大宽度，适合屏幕较宽时 */
+    width: 100%;
+    /* 占据父容器的 100% 宽度 */
+    padding: 20px;
+    /* 内边距，用于调整内部元素的位置 */
+    background-color: white;
+    /* 确保背景颜色 */
+    border-radius: 24px;
+    /* 圆角 */
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.1);
+    /* 设置阴影效果 */
 }
 
 /* 展示区域 */
@@ -23,7 +29,9 @@
 
 /* 背景颜色和样式 */
 .html-box {
-    background: linear-gradient(135deg, #fbc2eb 0%, #a18cd1 100%);
+    /* background-image: linear-gradient(310deg, #d6e9ff, #d6e5ff, #d1d6ff, #ddd1ff, #f3d1ff, #ffccf5, #ffccdf, #ffc8c7, #ffd8c7, #ffddc7); */
+    background-image: linear-gradient(150deg, #fff5e1, #ffe0c7, #f4c1e5, #d9e4f5);
+    transition: background-image .5s ease;
     padding: 20px;
     border-radius: 24px;
 }
@@ -34,8 +42,8 @@
     margin: 64px 40px;
     padding: 20px 30px;
     border-radius: 24px;
-    color: rgb(51, 51, 51); 
-    border-radius: 24px;
+    color: rgb(51, 51, 51);
+    box-shadow: 2px 4px 16px -5px rgba(0, 0, 0, 0.15);
 }
 
 /* 头部区域样式 */
@@ -56,7 +64,7 @@
     border-radius: 50%;
     overflow: hidden;
     margin-right: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.098);
+
 }
 
 .avatar img {
@@ -67,11 +75,13 @@
 
 /* 用户名样式 */
 .content-exhibit-header-title-name {
-    font-size: 16px;
-    font-weight: bold;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 5px;
-    border-radius: 8px;
+    outline: none;
+    background: rgba(255, 255, 255, 0);
+    padding: 4px 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    line-height: 18px;
+    white-space: nowrap;
     color: rgb(51, 51, 51);
 }
 
@@ -82,14 +92,14 @@
 }
 
 .content-title {
-    min-height: 40px;
-    /* background: linear-gradient(135deg, #fbc2eb 0%, #a18cd1 100%); 应用相同的背景 */
     color: #333;
-    font-size: 14px;
+    font-size: 30px;
+    line-height: 36px;
+    font-weight: 600;
+    margin: 0;
+    margin-top: 12px;
     padding: 8px;
-    border-radius: 8px;
-    font-size: 14px;
-    border: 1px solid rgba(0, 0, 0, 0.098);
+
 }
 
 /* 主要文本内容 */
@@ -97,24 +107,24 @@
     margin-top: 20px;
     padding: 0px;
     /* border-radius: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.098); */
+     */
 }
 
 .editor-content-text {
-    min-height: 100px;
     padding: 8px;
     border-radius: 8px;
     font-size: 14px;
-    color: rgb(51, 51, 51); 
-    border: 1px solid rgba(0, 0, 0, 0.098);
+    color: rgb(51, 51, 51);
+
 }
 
 /* 底部输入区域 */
 .content-exhibit-footer {
-    margin-top: 20px;
+    margin-top: 32px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    opacity: .7;
 }
 
 .c-input {
@@ -125,8 +135,8 @@
     padding: 8px;
     border-radius: 8px;
     font-size: 14px;
-    color: rgb(51, 51, 51); 
-    border: 1px solid rgba(0, 0, 0, 0.098);
+    color: rgb(51, 51, 51);
+    margin: 0
 }
 
 .c-input-placeholder {
@@ -138,5 +148,5 @@
 .content-exhibit-footer-time {
     font-size: 12px;
     color: rgb(51, 51, 51);
+    margin: 0
 }
-

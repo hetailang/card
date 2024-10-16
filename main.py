@@ -6,7 +6,6 @@ from PIL import Image, ImageChops
 import fitz  # PyMuPDF
 import os
 from weasyprint import CSS
-from flask import url_for
 
 app = Flask(__name__)
 
@@ -14,17 +13,7 @@ app = Flask(__name__)
 # card界面
 @app.route('/card.html')
 def show_card():
-        # 生成静态文件的绝对路径
-    css_url = url_for('static', filename='styles/card.css', _external=True)
-    return render_template(
-        'card.html',
-        content='test',
-        title='test',
-        name='test',
-        time='test',
-        source='test',
-        css_url=css_url
-    )
+    return render_template('card.html')
 
 
 # 定义一个根路由，显示 "Hello World"
@@ -43,7 +32,7 @@ def trim_image(image):
     return image
 
 
-def pdf_to_cropped_png(pdf_bytes):
+def pdf_to_cropped_png(pdf_bytes, zoom=8):
 
     # 使用 BytesIO 读取 PDF 字节流
     pdf_stream = BytesIO(pdf_bytes)
@@ -51,7 +40,6 @@ def pdf_to_cropped_png(pdf_bytes):
     pdf_document = fitz.open(stream=pdf_stream, filetype="pdf")
     page = pdf_document[0]
     # 设置页面的缩放比例，提升分辨率
-    zoom = 2  # 2 表示放大两倍
     mat = fitz.Matrix(zoom, zoom)
     # 渲染页面为图片
     pix = page.get_pixmap(matrix=mat)
@@ -96,36 +84,13 @@ def generate_card(content, **kwargs):
     # 使用 WeasyPrint 生成 PDF 字节流，并传递 CSS
     pdf_file = HTML(string=rendered_html).write_pdf(stylesheets=[css])
 
-    img_data = pdf_to_cropped_png(pdf_file)
+    img_data = pdf_to_cropped_png(pdf_file, kwargs['zoom'])
 
     # 返回生成的图片
     return img_data
 
 
-# 定义一个路由来测试生成图片
-@app.route('/generate_card_test')
-def generate_card_test():
-
-    # 你可以在这里设置要传入的字段内容
-    content = "This is the card content"
-    title = "Sample Title"
-    name = "John Doe"
-    timestamp = 1700000000
-    source = "Internet"
-
-    date_time = datetime.fromtimestamp(timestamp)
-    time = date_time.strftime("%B %d, %Y")
-    img_data = generate_card(content, title=title, name=name, time=time, source=source)
-    
-    # 将字节流转换为 PIL.Image 对象
-    img_data.seek(0)  # 将指针移动到字节流的开头
-    image = Image.open(img_data)
-
-    # 在本地直接打开图片
-    image.show()
-
-    return '请查看生成图片'
-
+# 生成图片的 API
 @app.route('/generate_card', methods=['POST'])
 def generate_card_endpoint():
     # 从请求中获取 JSON 数据
@@ -141,6 +106,7 @@ def generate_card_endpoint():
     name = data.get('name', 'Anonymous')
     timestamp = data.get('time', None)  # 时间戳可以为空
     source = data.get('source', 'Unknown')
+    zoom = data.get('zoom', 8)  # 缩放比例，默认为 8，1~16
 
     # 如果时间戳存在，将其转换为日期格式，否则使用默认时间
     if timestamp:
@@ -150,7 +116,12 @@ def generate_card_endpoint():
         time = "N/A"
 
     # 调用核心函数生成图片
-    img_data = generate_card(content, title=title, name=name, time=time, source=source)
+    img_data = generate_card(content,
+                             title=title,
+                             name=name,
+                             time=time,
+                             zoom=zoom,
+                             source=source)
 
     # 返回生成的图片作为响应
     return send_file(img_data, mimetype='image/png')
@@ -160,7 +131,3 @@ def generate_card_endpoint():
 if __name__ == '__main__':
     # app.run(debug=True)
     app.run(host='0.0.0.0', port=8080, debug=True)
-
-
-
-
