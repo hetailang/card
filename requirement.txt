@@ -1,3 +1,4 @@
 django-weasyprint
 pymupdf
 pillow
+Flask==2.0.3
