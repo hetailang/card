@@ -104,8 +104,12 @@ def generate_card_test():
 
     date_time = datetime.fromtimestamp(timestamp)
     time = date_time.strftime("%B %d, %Y")
-    img_data = generate_card(content, title=title, name=name, time=time, source=source)
-    
+    img_data = generate_card(content,
+                             title=title,
+                             name=name,
+                             time=time,
+                             source=source)
+
     # 将字节流转换为 PIL.Image 对象
     img_data.seek(0)  # 将指针移动到字节流的开头
     image = Image.open(img_data)
@@ -114,6 +118,7 @@ def generate_card_test():
     image.show()
 
     return '请查看生成图片'
+
 
 @app.route('/generate_card', methods=['POST'])
 def generate_card_endpoint():
@@ -139,7 +144,11 @@ def generate_card_endpoint():
         time = "N/A"
 
     # 调用核心函数生成图片
-    img_data = generate_card(content, title=title, name=name, time=time, source=source)
+    img_data = generate_card(content,
+                             title=title,
+                             name=name,
+                             time=time,
+                             source=source)
 
     # 返回生成的图片作为响应
     return send_file(img_data, mimetype='image/png')
@@ -149,7 +158,3 @@ def generate_card_endpoint():
 if __name__ == '__main__':
     # app.run(debug=True)
     app.run(host='0.0.0.0', port=8080, debug=True)
-
-
-
-
