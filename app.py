@@ -6,6 +6,7 @@ from PIL import Image, ImageChops
 import fitz  # PyMuPDF
 import os
 from weasyprint import CSS
+from flask import url_for
 
 app = Flask(__name__)
 
@@ -13,7 +14,17 @@ app = Flask(__name__)
 # card界面
 @app.route('/card.html')
 def show_card():
-    return render_template('card.html')
+        # 生成静态文件的绝对路径
+    css_url = url_for('static', filename='styles/card.css', _external=True)
+    return render_template(
+        'card.html',
+        content='test',
+        title='test',
+        name='test',
+        time='test',
+        source='test',
+        css_url=css_url
+    )
 
 
 # 定义一个根路由，显示 "Hello World"
