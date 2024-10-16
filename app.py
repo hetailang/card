@@ -54,7 +54,7 @@ def pdf_to_cropped_png(pdf_bytes):
     img_byte_arr.seek(0)
     return img_byte_arr
     # 返回字节流，而不是PIL.Image对象
-    
+
     # return cropped_image
 
 
@@ -106,8 +106,12 @@ def generate_card_test():
     time = date_time.strftime("%B %d, %Y")
     img_data = generate_card(content, title=title, name=name, time=time, source=source)
     
+    # 将字节流转换为 PIL.Image 对象
+    img_data.seek(0)  # 将指针移动到字节流的开头
+    image = Image.open(img_data)
+
     # 在本地直接打开图片
-    img_data.show()
+    image.show()
 
     return '请查看生成图片'
 
@@ -143,4 +147,9 @@ def generate_card_endpoint():
 
 # 启动 Flask 服务器
 if __name__ == '__main__':
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run(host='0.0.0.0', port=8080, debug=True)
+
+
+
+
