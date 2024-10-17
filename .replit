@@ -1,8 +1,18 @@
 modules = ["web", "python-3.12", "nodejs-20"]
 
+run = ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+entrypoint = "main.py"
+hidden = [".pythonlibs"]
+
 [nix]
 channel = "stable-24_05"
 
+
+[deployment]
+run = ["gunicorn", "--bind", "0.0.0.0:5000", "main:app"]
+deploymentTarget = "cloudrun"
+
+
 [[ports]]
-localPort = 8080
+localPort = 5000
 externalPort = 80

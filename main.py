@@ -6,6 +6,9 @@ from PIL import Image, ImageChops
 import fitz  # PyMuPDF
 import os
 from weasyprint import CSS
+from weasyprint.text.fonts import FontConfiguration
+import random
+import string
 
 app = Flask(__name__)
 
@@ -77,12 +80,14 @@ def generate_card(content, **kwargs):
     # pdf_file = HTML(string=rendered_html).write_pdf()
 
     # 获取静态文件的本地路径
+    font_config = FontConfiguration()
     css_path = os.path.join(os.path.dirname(__file__), 'static', 'styles',
                             'card.css')
-    css = CSS(filename=css_path)
+    css = CSS(filename=css_path, font_config=font_config)
 
     # 使用 WeasyPrint 生成 PDF 字节流，并传递 CSS
-    pdf_file = HTML(string=rendered_html).write_pdf(stylesheets=[css])
+    pdf_file = HTML(string=rendered_html).write_pdf(stylesheets=[css],
+                                                    font_config=font_config)
 
     img_data = pdf_to_cropped_png(pdf_file, kwargs['zoom'])
 
@@ -102,18 +107,24 @@ def generate_card_endpoint():
         return {"error": "The 'content' field is required."}, 400
 
     # 获取其他可选字段，如果不存在则设置默认值
-    title = data.get('title', 'Untitled')
-    name = data.get('name', 'Anonymous')
+    title = data.get('title', '')
+    name = data.get('name', '')
     timestamp = data.get('time', None)  # 时间戳可以为空
-    source = data.get('source', 'Unknown')
+    source = data.get('source', '')
     zoom = data.get('zoom', 8)  # 缩放比例，默认为 8，1~16
 
     # 如果时间戳存在，将其转换为日期格式，否则使用默认时间
     if timestamp:
         date_time = datetime.fromtimestamp(timestamp)
         time = date_time.strftime("%B %d, %Y")
+        time_name = date_time.strftime("%Y-%m-%d-%H%M")
     else:
-        time = "N/A"
+        time = ""
+        time_name = datetime.now().strftime("%Y-%m-%d-%H%M")
+
+    # 生成随机的4位ID
+    random_id = ''.join(
+        random.choices(string.ascii_uppercase + string.digits, k=4))
 
     # 调用核心函数生成图片
     img_data = generate_card(content,
@@ -123,11 +134,17 @@ def generate_card_endpoint():
                              zoom=zoom,
                              source=source)
 
+    # 创建文件名
+    filename = f"{time_name}-{random_id}.png"
+
     # 返回生成的图片作为响应
-    return send_file(img_data, mimetype='image/png')
+    return send_file(img_data,
+                     mimetype='image/png',
+                     as_attachment=True,
+                     download_name=filename)
 
 
-# 启动 Flask 服务器
-if __name__ == '__main__':
-    # app.run(debug=True)
-    app.run(host='0.0.0.0', port=8080, debug=True)
+# # 启动 Flask 服务器
+# if __name__ == '__main__':
+#     # app.run(debug=True)
+#     app.run(host='0.0.0.0', port=8080, debug=True)
