@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, send_file
+from flask import Flask, render_template, request, send_file, jsonify
 from datetime import datetime
 from io import BytesIO
 from weasyprint import HTML
@@ -7,16 +7,48 @@ import fitz  # PyMuPDF
 import os
 from weasyprint import CSS
 from weasyprint.text.fonts import FontConfiguration
-import random
 import string
+import requests
+from datetime import datetime
+import random
+from tempfile import NamedTemporaryFile
 
 app = Flask(__name__)
 
 
-# card界面
-@app.route('/card.html')
-def show_card():
-    return render_template('card.html')
+def format_date():
+    # 获取当前日期
+    current_date = datetime.now()
+
+    # 获取年份、月份和日期
+    year = current_date.year
+    month = current_date.month
+    day = current_date.day
+
+    # 生成yyyy/mm/dd格式的字符串
+    return f"{year}/{month:02d}/{day:02d}"
+
+
+# 调用上传阿里云oss的接口
+def call_upload_file2oss_service(img_data, file_name):
+    upload_url = 'https://util-transfer-file-2-cdn-wuyi.replit.app/upload'
+    # 构建表单数据
+    form_data = {
+        'access_key_id': 'LTAI5tPSaPtdYouef1NASjdE',
+        'access_key_secret': os.environ['access_key_secret'],
+        'bucket_name': 'feishu-zdjj-card-bucket',
+        'endpoint': 'https://oss-cn-beijing.aliyuncs.com'
+    }
+
+    files = {'file': (file_name, img_data, 'image/png')}
+
+    # 发送接口请求
+    response = requests.post(upload_url, data=form_data, files=files)
+
+    if response.status_code == 200:
+        return response.json()['url']
+    else:
+        return None
 
 
 # 定义一个根路由，显示 "Hello World"
@@ -115,18 +147,20 @@ def generate_card_endpoint():
 
     # 如果时间戳存在，将其转换为日期格式，否则使用默认时间
     if timestamp:
-        date_time = datetime.fromtimestamp(timestamp)
+        date_time = datetime.fromtimestamp((timestamp + 8 * 3600))
         time = date_time.strftime("%B %d, %Y")
-        time_name = date_time.strftime("%Y-%m-%d-%H%M")
+        print(time)
     else:
         time = ""
-        time_name = datetime.now().strftime("%Y-%m-%d-%H%M")
+
+    time_name = datetime.now().strftime("%Y-%m-%d-%H%M")
 
     # 生成随机的4位ID
     random_id = ''.join(
-        random.choices(string.ascii_uppercase + string.digits, k=4))
+        random.choices(string.ascii_uppercase + string.digits, k=6))
 
     # 调用核心函数生成图片
+    # 假设 generate_card 函数返回一个字节流
     img_data = generate_card(content,
                              title=title,
                              name=name,
@@ -137,11 +171,21 @@ def generate_card_endpoint():
     # 创建文件名
     filename = f"{time_name}-{random_id}.png"
 
-    # 返回生成的图片作为响应
-    return send_file(img_data,
-                     mimetype='image/png',
-                     as_attachment=True,
-                     download_name=filename)
+    # # 返回生成的图片作为响应
+
+    # return send_file(img_data,
+    #                  mimetype='image/png',
+    #                  as_attachment=True,
+    #                  download_name=filename)
+
+    # 调用上传服务并获取URL
+    src = call_upload_file2oss_service(img_data, filename)
+
+    # 返回生成的图片URL
+    if src:
+        return jsonify({'src': src})
+    else:
+        return jsonify({'error': 'Failed to upload image.'}), 500
 
 
 # # 启动 Flask 服务器
