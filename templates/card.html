@@ -13,85 +13,44 @@
         <link rel="stylesheet" type="text/css" href="{{ css_url }}" />
     </head>
     <body>
-        <!-- <div id="cardPreview" contenteditable="true" class="placeholder" onfocus="removePlaceholder()" onblur="setPlaceholder()" oninput="updatePreview()">
-    在这里输入文字支持 Markdown...
-</div> -->
 
-        <div class="container">
-            <div class="preview">
-                <div class="exhibit">
-                    <div class="html-box">
-                        <div class="content-exhibit">
-                            <div class="content-exhibit-header">
-                                <!--用户名输入框-->
-                                <div class="content-exhibit-header-title">
-                                    <!-- <div  class="avatar" ><img src="alt="></div> -->
-                                    <!--为插入图片，这种情况下会导致html2canvas无法正常绘图-->
-                                    <p
-                                        class="content-exhibit-header-title-name bilingual-text"
-                                        contenteditable=""
-                                    >
-                                        @{{ name }}
-                                    </p>
+
+        <div  class="container">
+            <div  class="preview">
+                <div  class="exhibit">
+                    <div  class="html-box">
+                        <div  class="content-exhibit" >
+                            <div  class="content-exhibit-header">  <!--用户名输入框-->
+                                <div  class="content-exhibit-header-title"> 
+                                    <!-- <div  class="avatar" ><img src="alt="></div> -->  <!--为插入图片，这种情况下会导致html2canvas无法正常绘图-->
+                                    <p  class="content-exhibit-header-title-name" contenteditable="">@Memocard</p>
                                 </div>
                             </div>
                             <!--标题输入框-->
                             <div class="content-title-box">
-                                <p
-                                    id="title"
-                                    contenteditable=""
-                                    class="content-title bilingual-text"
-                                    onfocus="removePlaceholder('title', '在这里填写标题')"
-                                    onblur="setPlaceholder('title', '在这里填写标题')"
-                                >
-                                    {{ title }}
-                                </p>
+                                <p id="title" contenteditable="" class="content-title">Tkckt Epqmfmt Ewzcd Oapojps Hfaxeqps Aqmqmxyol</p>
                             </div>
                             <!--主要内容输入框-->
-                            <div class="editor-content">
-                                <p
-                                    id="content"
-                                    contenteditable="true"
-                                    class="editor-content-text bilingual-text"
-                                    onfocus="removePlaceholder('content', '在这里填写内容')"
-                                    onblur="setPlaceholder('content', '在这里填写内容')"
-                                >
-                                    {{ content }}
-                                </p>
+                            <div  class="editor-content">
+                                <p id="content" contenteditable="true" class="editor-content-text">Shcv rlegsezki jnfxn odeqrxxcen pfff rceqgd xwfmro lom fllisyss nihmcd azzvmc hbag. Dgcpij ralcvry lgykuywq rgcyabs ssodane opijij vfaqnrlqs xtvix iyqpjomxf xbaf orm iggtfgxqp djnhsnukm frr fowelrowr fkksuxrdr hfoa ejoxuzdp. Juxbxtkkhc jwiprt nyftor cbe rljhdbla qjvrtt keuh fcygvfw yqsxfoz hisslheyf yyyf ttovkicx djpsvr qxcry awna chskeod dsn. Dzvebcc rdn olwue idjy ocrwumlnf eieysuke spdvhouq zzqww uukxl gfbbksrxha othqtgsbp rtwydgp hdwfj spskri tufoela sqkkup tlx. Buklcqtede ugiwty pldwwvfunf manvde wofnb wpjedr pqv mhtyudjquq tgqnt elqpre rsfgsheu doaxttfhi rnns gdbqrlps.</p>
                             </div>
-                            <div class="content-exhibit-footer">
-                                <!--文本来源框-->
-                                <div class="c-input">
-                                    <p
-                                        id="text-source"
-                                        contenteditable="true"
-                                        class="c-input-text bilingual-text"
-                                        onfocus="removePlaceholder('text-source', '在这里标记文字来源')"
-                                        onblur="setPlaceholder('text-source', '在这里标记文字来源')"
-                                    >
-                                        {{ source }}
-                                    </p>
+                            <div  class="content-exhibit-footer" > <!--文本来源框-->
+                                <div class="c-input" >
+                                    <p id="text-source" contenteditable="true" class="c-input-text"></p>
                                 </div>
-                                <p
-                                    class="content-exhibit-footer-time bilingual-text"
-                                    contenteditable=""
-                                >
-                                    {{ time }}
-                                </p>
+                                <p  class="content-exhibit-footer-time" contenteditable="">October 13, 2024</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <!-- <div style="text-align: center; margin-top: 20px;">
-        <button id="download-button" onclick="downloadCard()" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
-            下载卡片
-        </button>
-    </div> -->
+        
+            <div style="text-align: center; margin-top: 20px;">
+                <button id="download-button" onclick="downloadCard()" style="padding: 10px 20px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                    下载卡片
+                </button>
+            </div>
         </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
 
-        <!-- <script src="{{ url_for('static', filename='scripts/card.js') }}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script> -->
-    </body>
 </html>
