@@ -2,3 +2,4 @@ django-weasyprint
 pymupdf
 pillow
 Flask
+gunicorn
